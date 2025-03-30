@@ -174,6 +174,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Enviar datos al servidor para análisis (si está configurado)
                 sendResponsesForAnalysis();
                 
+                // Preparar y enviar las respuestas por correo
+                enviarRespuestasPorCorreo();
+                
                 // Registrar el evento de envío del cuestionario
                 logAnalytics('submit_questionnaire', { 
                     completed: true, 
@@ -314,4 +317,42 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
     });
+
+    // Función para preparar y enviar las respuestas por correo
+    function enviarRespuestasPorCorreo() {
+        try {
+            // Crear un texto formateado con todas las preguntas y respuestas
+            let mensajeFormateado = "RESPUESTAS DEL CUESTIONARIO:\n\n";
+            
+            // Recorrer todas las respuestas
+            for (const preguntaId in userResponses.answers) {
+                const respuesta = userResponses.answers[preguntaId];
+                mensajeFormateado += `${respuesta.question}\n`;
+                mensajeFormateado += `Respuesta: ${respuesta.answer}\n\n`;
+            }
+            
+            // Añadir información adicional
+            mensajeFormateado += `\nFecha y hora: ${new Date().toLocaleString()}\n`;
+            mensajeFormateado += `ID de sesión: ${userResponses.sessionId}\n`;
+            
+            // Preparar los parámetros para el correo
+            const templateParams = {
+                to_name: 'Administrador',
+                from_name: 'Cuestionario - 9 Pasos para una Limpieza Facial',
+                email_to: 'hristiankrasimirov7@gmail.com',
+                asunto: '9 pasos para una limpieza facial',
+                mensaje: mensajeFormateado
+            };
+            
+            // Enviar el correo usando EmailJS
+            emailjs.send('service_7glcnro', 'template_ixpyugj', templateParams)
+                .then(function(response) {
+                    console.log('Correo enviado con éxito:', response);
+                }, function(error) {
+                    console.error('Error al enviar el correo:', error);
+                });
+        } catch (error) {
+            console.error('Error al preparar el correo:', error);
+        }
+    }
 }); 
