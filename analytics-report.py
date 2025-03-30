@@ -46,7 +46,7 @@ CONFIG = {
     'report_output': 'analytics/reports/',
     'email': {
         'sender': 'solucionesworld2016@gmail.com',
-        'recipients': ['solucionesworld2016@gmail.com'],
+        'recipients': ['hristiankrasimirov7@gmail.com'],
         'subject_template': '9 Pasos para una Limpieza Facial - Informe Semanal ({date})',
         'smtp_server': 'smtp.gmail.com',
         'smtp_port': 587,
