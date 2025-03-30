@@ -1,298 +1,269 @@
-/**
- * Cuestionario - 9 Pasos para una Limpieza Facial Profesional
- */
+// Inicialización de AOS (Animaciones al hacer scroll)
+AOS.init({
+    duration: 800,
+    easing: 'ease',
+    once: true,
+    offset: 100
+});
+
+// Contador regresivo y manejo de cookies
 document.addEventListener('DOMContentLoaded', function() {
+    // Configuración del contador: 25 minutos en segundos
+    const COUNTDOWN_DURATION = 25 * 60;
+    
     // Referencias a elementos del DOM
-    const form = document.getElementById('quiz-form');
-    const questions = document.querySelectorAll('.question-container');
-    const progressBar = document.querySelector('.progress-bar');
-    const progressIndicator = document.getElementById('progress-indicator');
-    const progressText = document.getElementById('progress-text');
-    const nextButtons = document.querySelectorAll('.btn-next');
-    const prevButtons = document.querySelectorAll('.btn-prev');
-    const submitButton = document.querySelector('.btn-submit');
-    const countdownElement = document.getElementById('countdown');
-    const currentYearElement = document.getElementById('current-year');
-    const redirectUrl = "https://spmarketing97.github.io/9-Pasos-para-una-Limpieza-Facial-Profesional/";
+    const headerMinutes = document.getElementById('header-minutes');
+    const headerSeconds = document.getElementById('header-seconds');
+    const footerMinutes = document.getElementById('footer-minutes');
+    const footerSeconds = document.getElementById('footer-seconds');
+    const headerCountdown = document.getElementById('header-countdown');
+    const footerCountdown = document.getElementById('footer-countdown');
+    const currentYearSpan = document.getElementById('current-year');
+    const navbar = document.querySelector('.navbar');
+    const navbarToggle = document.querySelector('.navbar-toggle');
+    const navbarLinks = document.querySelector('.navbar-links');
     
-    // Total de preguntas
-    const totalQuestions = questions.length - 1; // Restamos 1 por el contenedor de resultados
+    // Funcionalidad de menú toggle para móviles
+    if (navbarToggle && navbarLinks) {
+        navbarToggle.addEventListener('click', function() {
+            navbarLinks.classList.toggle('active');
+            const isOpen = navbarLinks.classList.contains('active');
+            navbarToggle.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+        });
+    }
     
-    // Pregunta actual
-    let currentQuestion = 1;
+    // Cambio de estilo del navbar al hacer scroll
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+            navbar.classList.add('scrolled');
+        } else {
+            navbar.classList.remove('scrolled');
+        }
+    });
     
-    // Objeto para almacenar las respuestas del usuario
-    let userResponses = {
-        timestamp: new Date().toISOString(),
-        sessionId: generateSessionId(),
-        answers: {}
+    // Variables para el contador
+    let countdownTime;
+    let countdownInterval;
+    
+    // Función para establecer el año actual en el footer
+    function setCurrentYear() {
+        const now = new Date();
+        currentYearSpan.textContent = now.getFullYear();
+    }
+    
+    // Actualizar el año actual
+    setCurrentYear();
+    
+    // Función para guardar el tiempo restante en cookies
+    function saveCountdownTime(time) {
+        const expiryDate = new Date();
+        expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 días
+        document.cookie = `countdownTime=${time};expires=${expiryDate.toUTCString()};path=/`;
+    }
+    
+    // Función para leer el tiempo restante de las cookies
+    function getCountdownTime() {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.startsWith('countdownTime=')) {
+                return parseInt(cookie.substring('countdownTime='.length), 10);
+            }
+        }
+        return null;
+    }
+    
+    // Función para formatear el tiempo (añadir ceros a la izquierda)
+    function formatTime(time) {
+        return time < 10 ? `0${time}` : time;
+    }
+    
+    // Función para actualizar la visualización del contador
+    function updateCountdownDisplay() {
+        const minutes = Math.floor(countdownTime / 60);
+        const seconds = countdownTime % 60;
+        
+        // Actualiza ambos contadores (cabecera y footer)
+        headerMinutes.textContent = formatTime(minutes);
+        headerSeconds.textContent = formatTime(seconds);
+        footerMinutes.textContent = formatTime(minutes);
+        footerSeconds.textContent = formatTime(seconds);
+        
+        // Añade clase de urgencia cuando queden menos de 5 minutos
+        if (countdownTime <= 300) {
+            headerCountdown.classList.add('urgent');
+            footerCountdown.classList.add('urgent');
+        } else {
+            headerCountdown.classList.remove('urgent');
+            footerCountdown.classList.remove('urgent');
+        }
+    }
+    
+    // Función para iniciar el contador
+    function startCountdown() {
+        // Comprueba si hay un contador guardado en cookies
+        const savedTime = getCountdownTime();
+        
+        // Si hay tiempo guardado y es válido, lo usamos; de lo contrario, comenzamos desde el principio
+        if (savedTime && savedTime > 0 && savedTime <= COUNTDOWN_DURATION) {
+            countdownTime = savedTime;
+        } else {
+            countdownTime = COUNTDOWN_DURATION;
+        }
+        
+        // Actualiza la visualización inicial
+        updateCountdownDisplay();
+        
+        // Inicia el intervalo para el conteo regresivo
+        countdownInterval = setInterval(function() {
+            countdownTime--;
+            
+            if (countdownTime <= 0) {
+                // Cuando llega a cero, reinicia el contador
+                countdownTime = COUNTDOWN_DURATION;
+                
+                // Elimina la clase de urgencia
+                headerCountdown.classList.remove('urgent');
+                footerCountdown.classList.remove('urgent');
+            }
+            
+            // Actualiza la visualización y guarda en cookies
+            updateCountdownDisplay();
+            saveCountdownTime(countdownTime);
+        }, 1000);
+    }
+    
+    // Acción de scroll para el contador de la cabecera
+    window.addEventListener('scroll', function() {
+        const countdownSticky = document.querySelector('.countdown-sticky');
+        const scrollPosition = window.scrollY;
+        
+        // Cuando el usuario hace scroll, ajustamos la opacidad del contador
+        if (scrollPosition > 200) {
+            countdownSticky.style.opacity = '0.9';
+        } else {
+            countdownSticky.style.opacity = '1';
+        }
+    });
+    
+    // Inicia el contador
+    startCountdown();
+    
+    // La implementación del acordeón se ha movido a js/accordion.js
+    // para mejorar la organización del código y evitar conflictos
+
+    
+    // Animación para números en contador de precio
+    const animateCountUp = () => {
+        const countElements = document.querySelectorAll('.count-up');
+        
+        countElements.forEach(element => {
+            const target = parseInt(element.getAttribute('data-target'));
+            const count = parseInt(element.innerText);
+            const speed = 50; // Velocidad de la animación
+            
+            if (count < target) {
+                element.innerText = Math.ceil(count + target / speed);
+                setTimeout(() => animateCountUp(), 1);
+            } else {
+                element.innerText = target;
+            }
+        });
     };
     
-    // Establecer el año actual en el footer
-    if (currentYearElement) {
-        currentYearElement.textContent = new Date().getFullYear();
-    }
+    // Navegación suave para enlaces de anclaje
+    const scrollLinks = document.querySelectorAll('a[href^="#"]');
     
-    // Inicializar la barra de progreso
-    updateProgressBar();
-    
-    // Función para generar un ID de sesión único
-    function generateSessionId() {
-        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-            const r = Math.random() * 16 | 0;
-            const v = c === 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
-    }
-    
-    // Función para actualizar la barra de progreso
-    function updateProgressBar() {
-        const progress = (currentQuestion / totalQuestions) * 100;
-        // Actualizar directamente el ancho del indicador de progreso
-        if (progressIndicator) {
-            progressIndicator.style.width = `${progress}%`;
-        }
-        // Actualizar el texto de progreso
-        progressText.textContent = `${currentQuestion}/${totalQuestions}`;
-    }
-    
-    // Mostrar una pregunta específica
-    function showQuestion(questionNumber) {
-        // Ocultar todas las preguntas
-        questions.forEach(question => {
-            question.classList.remove('active');
-        });
-        
-        // Mostrar la pregunta actual
-        const targetQuestion = document.querySelector(`[data-question="${questionNumber}"]`);
-        if (targetQuestion) {
-            targetQuestion.classList.add('active');
-        }
-        
-        // Actualizar la barra de progreso
-        updateProgressBar();
-    }
-    
-    // Validar que se haya seleccionado una opción
-    function validateQuestion(questionNumber) {
-        const currentQuestionElement = document.querySelector(`[data-question="${questionNumber}"]`);
-        const radioButtons = currentQuestionElement.querySelectorAll('input[type="radio"]');
-        let selected = false;
-        
-        radioButtons.forEach(radio => {
-            if (radio.checked) {
-                selected = true;
-                // Almacenar la respuesta seleccionada
-                const questionText = currentQuestionElement.querySelector('h2').textContent;
-                const optionText = currentQuestionElement.querySelector(`label[for="${radio.id}"]`).textContent;
-                
-                userResponses.answers[`q${questionNumber}`] = {
-                    question: questionText,
-                    answer: optionText,
-                    value: radio.value
-                };
-            }
-        });
-        
-        return selected;
-    }
-    
-    // Event listeners para botones de siguiente
-    nextButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Verificar si se ha seleccionado una opción
-            if (validateQuestion(currentQuestion)) {
-                currentQuestion++;
-                showQuestion(currentQuestion);
-                
-                // Registrar el evento de avance
-                logAnalytics('next_question', { 
-                    from: currentQuestion - 1, 
-                    to: currentQuestion 
-                });
-            } else {
-                // Mostrar mensaje de error si no se ha seleccionado una opción
-                alert('Por favor, selecciona una opción para continuar.');
-            }
-        });
-    });
-    
-    // Event listeners para botones de anterior
-    prevButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Registrar el evento de retroceso
-            logAnalytics('prev_question', { 
-                from: currentQuestion, 
-                to: currentQuestion - 1 
-            });
-            
-            currentQuestion--;
-            showQuestion(currentQuestion);
-        });
-    });
-    
-    // Event listener para el botón de enviar
-    if (submitButton) {
-        submitButton.addEventListener('click', function(e) {
+    scrollLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
             e.preventDefault();
             
-            // Verificar si se ha seleccionado una opción en la última pregunta
-            if (validateQuestion(currentQuestion)) {
-                // Ocultar todas las preguntas
-                questions.forEach(question => {
-                    question.classList.remove('active');
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
                 });
-                
-                // Mostrar resultados
-                const resultsContainer = document.querySelector('[data-question="results"]');
-                if (resultsContainer) {
-                    resultsContainer.classList.add('active');
-                }
-                
-                // Almacenar las respuestas en localStorage
-                saveUserResponses();
-                
-                // Enviar datos al servidor para análisis (si está configurado)
-                sendResponsesForAnalysis();
-                
-                // Registrar el evento de envío del cuestionario
-                logAnalytics('submit_questionnaire', { 
-                    completed: true, 
-                    answers_count: Object.keys(userResponses.answers).length 
-                });
-                
-                // Iniciar el contador para la redirección
-                let count = 5;
-                if (countdownElement) {
-                    countdownElement.textContent = count;
-                    
-                    const countdownInterval = setInterval(function() {
-                        count--;
-                        countdownElement.textContent = count;
-                        
-                        if (count <= 0) {
-                            clearInterval(countdownInterval);
-                            // Redirigir a la landing page principal
-                            window.location.href = redirectUrl;
-                        }
-                    }, 1000);
-                }
-            } else {
-                // Mostrar mensaje de error si no se ha seleccionado una opción
-                alert('Por favor, selecciona una opción para continuar.');
             }
+        });
+    });
+    
+    // Efecto paralaje para el banner
+    const banner = document.querySelector('.banner-img');
+    if (banner) {
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.pageYOffset;
+            banner.style.transform = `translateY(${scrollPosition * 0.4}px)`;
         });
     }
     
-    // Mostrar la primera pregunta al cargar
-    showQuestion(currentQuestion);
-    
-    // Función para guardar las respuestas en localStorage
-    function saveUserResponses() {
-        // Añadir tiempo de finalización
-        userResponses.completedAt = new Date().toISOString();
+    // Animación de aparición para elementos cuando se hacen visibles
+    const animateOnScroll = () => {
+        const elements = document.querySelectorAll('.animate-on-scroll');
         
-        // Verificar si el usuario ha aceptado las cookies antes de guardar
-        if (getCookieConsent()) {
-            // Obtener cuestionarios anteriores o iniciar array vacío
-            const previousResponses = JSON.parse(localStorage.getItem('userQuestionnaires') || '[]');
-            previousResponses.push(userResponses);
+        elements.forEach(element => {
+            const elementPosition = element.getBoundingClientRect().top;
+            const windowHeight = window.innerHeight;
             
-            // Guardar en localStorage
-            localStorage.setItem('userQuestionnaires', JSON.stringify(previousResponses));
-        }
-    }
-    
-    // Función para enviar datos al servidor para análisis
-    function sendResponsesForAnalysis() {
-        try {
-            // Verificar si existe el endpoint para enviar los datos y si hay consentimiento
-            if (!getCookieConsent()) {
-                console.log('Analytics deshabilitado: el usuario no ha dado consentimiento');
-                return;
+            if (elementPosition < windowHeight - 100) {
+                element.classList.add('visible');
             }
-            
-            const analyticsEndpoint = '/api/questionnaire-analytics';
-            
-            // Enviar datos mediante fetch API
-            fetch(analyticsEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(userResponses)
-            })
-            .catch(error => {
-                console.log('Error al enviar datos para análisis:', error);
-                // El error se maneja silenciosamente para no afectar la experiencia de usuario
-            });
-        } catch (error) {
-            // Si hay un error, lo registramos pero continuamos con la experiencia del usuario
-            console.log('Error en el proceso de envío de datos:', error);
-        }
-    }
+        });
+    };
     
-    // Función para registrar eventos de análisis
-    function logAnalytics(eventName, eventData) {
-        // Verificar si el usuario ha dado consentimiento
-        if (!getCookieConsent()) {
-            return;
-        }
-        
-        // Crear evento de análisis
-        const analyticsEvent = {
-            event: eventName,
-            timestamp: new Date().toISOString(),
-            sessionId: userResponses.sessionId,
-            ...eventData
-        };
-        
-        // Obtener eventos anteriores o iniciar array vacío
-        const previousEvents = JSON.parse(localStorage.getItem('questionnaireEvents') || '[]');
-        previousEvents.push(analyticsEvent);
-        
-        // Guardar en localStorage
-        localStorage.setItem('questionnaireEvents', JSON.stringify(previousEvents));
-        
-        // Enviar al servidor si existe la configuración
-        try {
-            const analyticsEventEndpoint = '/api/log-event';
-            fetch(analyticsEventEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(analyticsEvent)
-            }).catch(() => {
-                // Silenciosamente manejar errores para no interrumpir la experiencia
-            });
-        } catch (error) {
-            // Error silencioso
-        }
-    }
+    // Iniciar la primera animación de elementos y luego en scroll
+    animateOnScroll();
+    window.addEventListener('scroll', animateOnScroll);
     
-    // Verificar consentimiento de cookies
-    function getCookieConsent() {
-        // Verificar si window.analyticsEnabled está definido
-        if (typeof window.analyticsEnabled !== 'undefined') {
-            return window.analyticsEnabled;
-        }
+    // Efecto de brillo para botones principales
+    const primaryButtons = document.querySelectorAll('.btn-primary');
+    
+    primaryButtons.forEach(button => {
+        button.addEventListener('mouseover', function() {
+            this.classList.add('shine');
+        });
         
-        // Verificar cookie de consentimiento
-        const cookieValue = document.cookie
-            .split('; ')
-            .find(row => row.startsWith('limpieza_facial_cookie_consent='));
-            
-        return cookieValue ? cookieValue.split('=')[1] === 'true' : false;
-    }
-    
-    // Registrar evento de inicio del cuestionario solo si hay consentimiento
-    if (getCookieConsent()) {
-        logAnalytics('start_questionnaire', { page: window.location.pathname });
-    }
-    
-    // Evento para evitar el envío normal del formulario
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
+        button.addEventListener('mouseout', function() {
+            this.classList.remove('shine');
+        });
     });
-}); 
+    
+    // Efecto de pulsación para CTA principal
+    const pulsateButtons = document.querySelectorAll('.btn-lg.btn-primary');
+    
+    pulsateButtons.forEach(button => {
+        setInterval(() => {
+            button.classList.add('pulsate');
+            
+            setTimeout(() => {
+                button.classList.remove('pulsate');
+            }, 1000);
+        }, 3000);
+    });
+
+    // La funcionalidad del slider de testimonios se ha movido a js/testimonial-slider.js
+    // para mejorar la organización del código y evitar conflictos
+
+    // Flecha volver arriba
+    const backToTop = document.querySelector('.back-to-top');
+    
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            backToTop.classList.add('active');
+        } else {
+            backToTop.classList.remove('active');
+        }
+    });
+    
+    backToTop.addEventListener('click', function(e) {
+        e.preventDefault();
+        const header = document.querySelector('.header');
+        header.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+});
