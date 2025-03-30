@@ -1,90 +1,59 @@
-# Cuestionario - 9 Pasos para una Limpieza Facial Profesional
+# Sistema de Cuestionario Personalizado
 
-Este cuestionario forma parte del proyecto "9 Pasos para una Limpieza Facial Profesional". Está diseñado para recopilar información sobre los usuarios y personalizar su experiencia de aprendizaje.
+## Descripción
+Este sistema de cuestionario está diseñado para recopilar información valiosa de los usuarios interesados en el curso "9 Pasos para una Limpieza Facial Profesional". En lugar de ser un examen, este cuestionario funciona como una herramienta de personalización que adapta la experiencia de aprendizaje según las necesidades, experiencia previa y objetivos del usuario.
 
 ## Características
-
-- Formulario interactivo de 8 preguntas
-- Barra de progreso para seguimiento del avance
-- Adaptación responsiva para dispositivos móviles y de escritorio
-- Sistema de consentimiento de cookies conforme a normativas de privacidad
-- Integración con sistema de análisis para seguimiento de comportamiento del usuario
+- Interfaz intuitiva y atractiva
+- Progreso visual mediante barra de avance
+- 8 preguntas estratégicas para conocer al usuario
+- Sistema de navegación entre preguntas
+- Página de resultados personalizada
+- Redirección automática tras completar el cuestionario
+- Sistema de consentimiento de cookies integrado
+- Integración con sistema de análisis para seguimiento de datos
 
 ## Estructura de archivos
+- `index.html`: Estructura principal del cuestionario
+- `script.js`: Lógica de funcionamiento del cuestionario
+- `styles.css`: Estilos visuales del cuestionario
+- `cookie-consent.js`: Gestión del consentimiento de cookies
+- `cookies.html`: Página de política de cookies
+- `analytics/`: Directorio con archivos de configuración del sistema de análisis
+  - `analytics.js`: Script para seguimiento de interacciones
+  - `data/`: Almacenamiento de datos recopilados
+  - `reports/`: Informes generados a partir de los datos
+    - `charts/`: Gráficos para visualización de datos
+  - `storage/`: Almacenamiento temporal de datos procesados
 
-```
-Cuestionario/
-├── index.html           # Página principal del cuestionario
-├── styles.css           # Estilos del cuestionario
-├── script.js            # Funcionalidad JavaScript del cuestionario
-├── cookie-consent.js    # Gestión del consentimiento de cookies
-├── README.md            # Este archivo
-└── analytics/           # Archivos relacionados con análisis (copiados de la raíz)
-    ├── analytics.js     # Script de seguimiento para el front-end
-    └── ...
-```
+## Archivos de configuración
+El sistema incluye los siguientes archivos para la configuración de informes:
+- `analytics-report.py`: Script principal para generar informes
+- `weekly-report-scheduler.py`: Programador de informes semanales
+- `setup-task.bat`: Archivo para configurar tareas programadas en Windows
+- `analytics-config.md`: Documentación detallada de configuración
 
-## Sistema de cookies
+## Sistema de gestión de cookies
+El cuestionario cuenta con un sistema completo de gestión de consentimiento de cookies que:
+1. Muestra un banner informativo en la primera visita
+2. Permite aceptar o rechazar el uso de cookies
+3. Almacena la preferencia del usuario
+4. Solo activa el rastreo analítico si el usuario ha dado su consentimiento
+5. Proporciona información detallada en la página de política de cookies
 
-El cuestionario incluye un sistema completo de gestión de consentimiento de cookies que:
+## Integración con análisis
+Los datos recopilados a través del cuestionario se incluyen en los informes semanales generados por el sistema de análisis, proporcionando información valiosa sobre:
+- Tasa de finalización del cuestionario
+- Preferencias y perfiles de los usuarios
+- Tiempo medio de finalización
+- Preguntas que generan mayor abandono
+- Datos demográficos de los participantes
 
-1. Muestra un banner de consentimiento al usuario
-2. Permite aceptar o rechazar cookies no esenciales
-3. Almacena la preferencia del usuario durante 1 año
-4. Solo recopila datos analíticos si el usuario ha dado su consentimiento
+## Actualización de preguntas
+Para modificar las preguntas del cuestionario, edite el archivo `index.html` en la sección correspondiente. Cada pregunta sigue una estructura definida que incluye:
+- Título de la pregunta
+- Opciones de respuesta
+- Valores asociados a cada opción
 
-## Integración con Analytics
-
-El cuestionario está integrado con el sistema de analytics del proyecto principal, rastreando:
-
-- Inicio del cuestionario
-- Navegación entre preguntas
-- Respuestas seleccionadas
-- Finalización del cuestionario
-
-Todos estos datos se recopilan únicamente si el usuario ha dado su consentimiento de cookies.
-
-## Configuración y mantenimiento
-
-### Actualización de preguntas
-
-Para actualizar las preguntas del cuestionario, edite el archivo `index.html` siguiendo este formato:
-
-```html
-<div class="question-container" data-question="1">
-    <h2>¿Pregunta?</h2>
-    <div class="options">
-        <div class="option">
-            <input type="radio" id="q1-option1" name="q1" value="1">
-            <label for="q1-option1">Opción 1</label>
-        </div>
-        <!-- Más opciones -->
-    </div>
-    <!-- Botones de navegación -->
-</div>
-```
-
-### Personalización de estilos
-
-Los estilos pueden personalizarse editando `styles.css`. Las principales variables de color están definidas al inicio del archivo:
-
-```css
-:root {
-    --primary-color: #9be031;    /* Verde brillante */
-    --secondary-color: #2e4057;  /* Azul oscuro */
-    --accent-color: #e84855;     /* Rojo acentuado */
-    /* Más variables */
-}
-```
-
-### URL de redirección
-
-La URL a la que se redirige al usuario después de completar el cuestionario se puede modificar en el archivo `script.js`:
-
-```javascript
-const redirectUrl = "https://spmarketing97.github.io/9-Pasos-para-una-Limpieza-Facial-Profesional/";
-```
-
-## Informes de análisis
-
-Los datos recopilados por el cuestionario se incluyen en los informes semanales generados por el sistema de análisis. Para más información sobre la configuración de estos informes, consulte los archivos de Python en la carpeta raíz. 
+## Personalización de estilos
+Para modificar la apariencia visual del cuestionario, edite el archivo `styles.css`. El diseño está organizado en secciones claramente comentadas para facilitar su personalización. 

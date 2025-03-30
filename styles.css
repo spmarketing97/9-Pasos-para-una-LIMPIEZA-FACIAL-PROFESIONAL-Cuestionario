@@ -10,6 +10,7 @@
     --box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
     --border-radius: 8px;
     --transition: all 0.3s ease;
+    --progress-width: 12.5%; /* Ancho inicial de la barra de progreso (1/8) */
 }
 
 /* Reset y base */
@@ -109,7 +110,7 @@ h1, h2, h3, h4, h5, h6 {
     top: 0;
     left: 0;
     height: 100%;
-    width: 12.5%;
+    width: var(--progress-width); /* Usa la variable CSS */
     background-color: var(--primary-color);
     transition: width 0.3s ease;
 }

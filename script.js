@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Referencias a elementos del DOM
     const form = document.getElementById('quiz-form');
     const questions = document.querySelectorAll('.question-container');
-    const progressBar = document.getElementById('progress-bar');
+    const progressBar = document.querySelector('.progress-bar');
     const progressText = document.getElementById('progress-text');
     const nextButtons = document.querySelectorAll('.btn-next');
     const prevButtons = document.querySelectorAll('.btn-prev');
@@ -28,7 +28,12 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     
     // Establecer el año actual en el footer
-    currentYearElement.textContent = new Date().getFullYear();
+    if (currentYearElement) {
+        currentYearElement.textContent = new Date().getFullYear();
+    }
+    
+    // Inicializar la barra de progreso
+    updateProgressBar();
     
     // Función para generar un ID de sesión único
     function generateSessionId() {
@@ -42,8 +47,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para actualizar la barra de progreso
     function updateProgressBar() {
         const progress = (currentQuestion / totalQuestions) * 100;
-        progressBar.style.setProperty('--progress', `${progress}%`);
-        progressBar.querySelector('::before').style.width = `${progress}%`;
+        // Actualizar directamente el pseudo-elemento ::before a través de la variable CSS
+        document.documentElement.style.setProperty('--progress-width', `${progress}%`);
+        // Actualizar el texto de progreso
         progressText.textContent = `${currentQuestion}/${totalQuestions}`;
     }
     
@@ -61,8 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Actualizar la barra de progreso
-        progressBar.style.setProperty('--width', `${(questionNumber / totalQuestions) * 100}%`);
-        progressText.textContent = `${questionNumber}/${totalQuestions}`;
+        updateProgressBar();
     }
     
     // Validar que se haya seleccionado una opción
@@ -96,10 +101,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (validateQuestion(currentQuestion)) {
                 currentQuestion++;
                 showQuestion(currentQuestion);
-                
-                // Actualizar visualmente la barra de progreso
-                const progress = (currentQuestion / totalQuestions) * 100;
-                progressBar.querySelector(':before').style.width = `${progress}%`;
                 
                 // Registrar el evento de avance
                 logAnalytics('next_question', { 
@@ -159,24 +160,29 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Iniciar el contador para la redirección
                 let count = 5;
-                countdownElement.textContent = count;
-                
-                const countdownInterval = setInterval(function() {
-                    count--;
+                if (countdownElement) {
                     countdownElement.textContent = count;
                     
-                    if (count <= 0) {
-                        clearInterval(countdownInterval);
-                        // Redirigir a la landing page principal
-                        window.location.href = redirectUrl;
-                    }
-                }, 1000);
+                    const countdownInterval = setInterval(function() {
+                        count--;
+                        countdownElement.textContent = count;
+                        
+                        if (count <= 0) {
+                            clearInterval(countdownInterval);
+                            // Redirigir a la landing page principal
+                            window.location.href = redirectUrl;
+                        }
+                    }, 1000);
+                }
             } else {
                 // Mostrar mensaje de error si no se ha seleccionado una opción
                 alert('Por favor, selecciona una opción para continuar.');
             }
         });
     }
+    
+    // Mostrar la primera pregunta al cargar
+    showQuestion(currentQuestion);
     
     // Función para guardar las respuestas en localStorage
     function saveUserResponses() {
@@ -277,9 +283,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return cookieValue ? cookieValue.split('=')[1] === 'true' : false;
     }
     
-    // Inicializar el formulario mostrando la primera pregunta
-    showQuestion(1);
-    
     // Registrar evento de inicio del cuestionario solo si hay consentimiento
     if (getCookieConsent()) {
         logAnalytics('start_questionnaire', { page: window.location.pathname });
@@ -289,15 +292,4 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         e.preventDefault();
     });
-    
-    // Corregir el comportamiento de la barra de progreso
-    const allQuestions = document.querySelectorAll('.question-container:not([data-question="results"])');
-    progressBar.style.setProperty('--width', `${(1 / allQuestions.length) * 100}%`);
-    
-    // Actualizar la barra de progreso cuando se cargue la página
-    document.querySelectorAll('[data-question="1"]')[0].classList.add('active');
-    progressBar.querySelector('::before').style.width = `${(1 / totalQuestions) * 100}%`;
-    
-    // Exponer la función logAnalytics globalmente para que pueda ser usada por otros scripts
-    window.logAnalytics = logAnalytics;
 }); 
