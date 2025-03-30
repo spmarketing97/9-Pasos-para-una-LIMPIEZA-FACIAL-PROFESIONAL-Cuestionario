@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('quiz-form');
     const questions = document.querySelectorAll('.question-container');
     const progressBar = document.querySelector('.progress-bar');
+    const progressIndicator = document.getElementById('progress-indicator');
     const progressText = document.getElementById('progress-text');
     const nextButtons = document.querySelectorAll('.btn-next');
     const prevButtons = document.querySelectorAll('.btn-prev');
@@ -47,8 +48,10 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para actualizar la barra de progreso
     function updateProgressBar() {
         const progress = (currentQuestion / totalQuestions) * 100;
-        // Actualizar directamente el pseudo-elemento ::before a través de la variable CSS
-        document.documentElement.style.setProperty('--progress-width', `${progress}%`);
+        // Actualizar directamente el ancho del indicador de progreso
+        if (progressIndicator) {
+            progressIndicator.style.width = `${progress}%`;
+        }
         // Actualizar el texto de progreso
         progressText.textContent = `${currentQuestion}/${totalQuestions}`;
     }

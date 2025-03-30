@@ -104,13 +104,12 @@ h1, h2, h3, h4, h5, h6 {
     position: relative;
 }
 
-.progress-bar::before {
-    content: '';
+.progress-indicator {
     position: absolute;
     top: 0;
     left: 0;
     height: 100%;
-    width: var(--progress-width); /* Usa la variable CSS */
+    width: 12.5%; /* Valor inicial - 1/8 */
     background-color: var(--primary-color);
     transition: width 0.3s ease;
 }
