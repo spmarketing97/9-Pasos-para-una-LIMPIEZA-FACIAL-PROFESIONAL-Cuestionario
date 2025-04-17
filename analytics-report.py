@@ -28,6 +28,9 @@ import matplotlib.pyplot as plt
 from collections import Counter, defaultdict
 import random
 
+# Importar configuración
+from config import CONFIG
+
 # Configuración de logging
 logging.basicConfig(
     level=logging.INFO,
@@ -39,23 +42,6 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger('analytics-report')
-
-# Configuración
-CONFIG = {
-    'db_path': 'analytics/data/analytics.db',
-    'report_output': 'analytics/reports/',
-    'email': {
-        'sender': 'solucionesworld2016@gmail.com',
-        'recipients': ['hristiankrasimirov7@gmail.com'],
-        'subject_template': '9 Pasos para una Limpieza Facial - Informe Semanal ({date})',
-        'smtp_server': 'smtp.gmail.com',
-        'smtp_port': 587,
-        'smtp_user': 'solucionesworld2016@gmail.com',
-        'smtp_password': 'hvyj qclp lcuy gsgt'
-    },
-    'landing_path': 'C:/Users/soluc/OneDrive/Desktop/LANDING PAGES SO 🔥/9 Pasos para una Limpieza Facial Profesional',
-    'questionnaire_path': 'C:/Users/soluc/OneDrive/Desktop/LANDING PAGES SO 🔥/9 Pasos para una Limpieza Facial Profesional/Cuestionario'
-}
 
 # Asegurar que los directorios existan
 os.makedirs(os.path.dirname(CONFIG['db_path']), exist_ok=True)

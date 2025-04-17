@@ -1,92 +1,148 @@
-# Sistema de Cuestionario Personalizado
+# Cuestionario - 9 Pasos para una Limpieza Facial Profesional
 
-## Descripción
-Este sistema de cuestionario está diseñado para recopilar información valiosa de los usuarios interesados en el curso "9 Pasos para una Limpieza Facial Profesional". En lugar de ser un examen, este cuestionario funciona como una herramienta de personalización que adapta la experiencia de aprendizaje según las necesidades, experiencia previa y objetivos del usuario.
+Sistema de cuestionario interactivo para el proyecto "9 Pasos para una Limpieza Facial Profesional".
 
-## Características
-- Interfaz intuitiva y atractiva
-- Progreso visual mediante barra de avance
-- 8 preguntas estratégicas para conocer al usuario
-- Sistema de navegación entre preguntas
-- Página de resultados personalizada
-- Redirección automática tras completar el cuestionario
-- Sistema de consentimiento de cookies integrado
-- Integración con sistema de análisis para seguimiento de datos
+## Estructura del Proyecto
 
-## Estructura de archivos
-- `index.html`: Estructura principal del cuestionario
-- `script.js`: Lógica de funcionamiento del cuestionario
-- `styles.css`: Estilos visuales del cuestionario
-- `cookie-consent.js`: Gestión del consentimiento de cookies
-- `cookies.html`: Página de política de cookies
-- `analytics/`: Directorio con archivos de configuración del sistema de análisis
-  - `analytics.js`: Script para seguimiento de interacciones
-  - `data/`: Almacenamiento de datos recopilados
-  - `reports/`: Informes generados a partir de los datos
-    - `charts/`: Gráficos para visualización de datos
-  - `storage/`: Almacenamiento temporal de datos procesados
+El proyecto está organizado de la siguiente manera:
 
-## Archivos de configuración
-El sistema incluye los siguientes archivos para la configuración de informes:
-- `analytics-report.py`: Script principal para generar informes
-- `weekly-report-scheduler.py`: Programador de informes semanales
-- `setup-task.bat`: Archivo para configurar tareas programadas en Windows
-- `analytics-config.md`: Documentación detallada de configuración
+```
+.
+├── index.html                # Página principal del cuestionario
+├── script.js                 # Lógica del cuestionario
+├── styles.css                # Estilos del cuestionario
+├── cookie-consent.js         # Gestión de consentimiento de cookies
+├── config.js                 # Configuración general del proyecto
+├── README.md                 # Este archivo
+├── analytics/
+│   ├── analytics.js          # Script de analítica
+│   ├── data/                 # Datos de analítica (ignorado en Git)
+│   │   └── analytics.db      # Base de datos SQLite (no en Git)
+│   ├── reports/              # Informes generados
+│   │   └── charts/           # Gráficos para informes
+│   └── storage/              # Almacenamiento temporal (ignorado en Git)
+├── analytics-report.py       # Generador de informes
+├── weekly-report-scheduler.py # Programador de informes
+├── config.py                 # Configuración para scripts Python
+└── config_secret.py.example  # Plantilla para configuración secreta
+```
 
-## Sistema de gestión de cookies
-El cuestionario cuenta con un sistema completo de gestión de consentimiento de cookies que:
-1. Muestra un banner informativo en la primera visita
-2. Permite aceptar o rechazar el uso de cookies
-3. Almacena la preferencia del usuario
-4. Solo activa el rastreo analítico si el usuario ha dado su consentimiento
-5. Proporciona información detallada en la página de política de cookies
+## Configuración para GitHub
 
-## Integración con análisis
-Los datos recopilados a través del cuestionario se incluyen en los informes semanales generados por el sistema de análisis, proporcionando información valiosa sobre:
-- Tasa de finalización del cuestionario
-- Preferencias y perfiles de los usuarios
-- Tiempo medio de finalización
-- Preguntas que generan mayor abandono
-- Datos demográficos de los participantes
+Para usar este proyecto con GitHub, sigue estos pasos:
 
-## Actualización de preguntas
-Para modificar las preguntas del cuestionario, edite el archivo `index.html` en la sección correspondiente. Cada pregunta sigue una estructura definida que incluye:
-- Título de la pregunta
-- Opciones de respuesta
-- Valores asociados a cada opción
+1. **Crea un repositorio** en GitHub para el proyecto.
 
-## Personalización de estilos
-Para modificar la apariencia visual del cuestionario, edite el archivo `styles.css`. El diseño está organizado en secciones claramente comentadas para facilitar su personalización.
+2. **Clona el repositorio** a tu máquina local:
+   ```
+   git clone https://github.com/tu-usuario/tu-repositorio.git
+   ```
 
-## Control de versiones con GitHub
-Este proyecto está configurado para trabajar con GitHub mediante los siguientes archivos:
+3. **Copia los archivos** de este proyecto al repositorio.
 
-### .gitignore
-Se ha configurado un archivo `.gitignore` para excluir del repositorio:
-- Archivos temporales del sistema (`.DS_Store`, `Thumbs.db`)
-- Entornos virtuales de Python y archivos compilados
-- Archivos de log y reportes generados
-- Directorios de datos sensibles (`analytics/data/`, `analytics/reports/`, `analytics/storage/`)
-- Archivos de dependencias (`node_modules/`)
-- Archivos de configuración personal (`.env`)
-- Archivos de configuración de IDEs
+4. **Configura tus credenciales** creando un archivo `config_secret.py` basado en el ejemplo:
+   ```
+   cp config_secret.py.example config_secret.py
+   ```
+   Luego edita `config_secret.py` con tus credenciales reales.
 
-### Estructura recomendada para el repositorio
-Al trabajar con este proyecto en GitHub, se recomienda:
+5. **Inicializa el repositorio**:
+   ```
+   git add .
+   git commit -m "Commit inicial"
+   git push -u origin main
+   ```
 
-1. Mantener la estructura de ramas:
-   - `main`: Versión estable y producción
-   - `develop`: Desarrollo y pruebas
-   - `feature/nombre`: Para nuevas características
+## Archivos para GitHub
 
-2. Convenciones para commits:
-   - `feat`: Nuevas características
-   - `fix`: Corrección de errores
-   - `docs`: Cambios en documentación
-   - `style`: Cambios en estilo visual
-   - `refactor`: Mejoras de código sin cambiar funcionalidad
+Estos son los archivos que debes subir a GitHub:
 
-3. Proceso de actualización:
-   - Crear Pull Requests para integrar cambios
-   - Revisar código antes de aprobar
-   - Mantener el archivo `.gitignore` actualizado según evolucione el proyecto 
+- ✅ `index.html`
+- ✅ `script.js`
+- ✅ `styles.css`
+- ✅ `cookie-consent.js`
+- ✅ `analytics/analytics.js`
+- ✅ `analytics/reports/charts/*.png` (gráficos generados)
+- ✅ `analytics-report.py`
+- ✅ `weekly-report-scheduler.py`
+- ✅ `config.py`
+- ✅ `config.js`
+- ✅ `config_secret.py.example` (ejemplo sin datos reales)
+- ✅ `README.md`
+- ✅ `favicon.svg`
+- ✅ `favicon.ico`
+- ✅ `favicon.png`
+- ✅ `.gitignore`
+
+## Archivos que NO deben estar en GitHub
+
+Estos archivos contienen datos sensibles o temporales y están configurados en `.gitignore`:
+
+- ❌ `analytics/data/analytics.db` (base de datos)
+- ❌ `analytics/storage/*` (datos temporales)
+- ❌ `analytics-report.log` (logs)
+- ❌ `config_secret.py` (credenciales reales)
+
+## Configuración Local
+
+Para configurar el proyecto localmente:
+
+1. Clona el repositorio:
+   ```
+   git clone https://github.com/tu-usuario/tu-repositorio.git
+   ```
+
+2. Crea un archivo `config_secret.py` basado en el ejemplo:
+   ```
+   cp config_secret.py.example config_secret.py
+   ```
+
+3. Edita `config_secret.py` con tus credenciales reales.
+
+4. Crea los directorios necesarios:
+   ```
+   mkdir -p analytics/data analytics/reports/charts analytics/storage
+   ```
+
+## Uso del Sistema
+
+### Generar Informes
+
+Para generar un informe manualmente:
+
+```bash
+python analytics-report.py
+```
+
+Para generar y enviar por correo:
+
+```bash
+python analytics-report.py --send-email
+```
+
+### Configurar Informes Automáticos
+
+En Windows:
+
+```bash
+python weekly-report-scheduler.py --install
+```
+
+## Solución de Problemas
+
+Si encuentras problemas con los informes o la analítica:
+
+1. Verifica que los directorios `analytics/data`, `analytics/reports` y `analytics/storage` existan.
+2. Comprueba las credenciales en `config_secret.py`.
+3. Revisa el archivo `analytics-report.log` para errores.
+
+## Contribuciones
+
+Para contribuir al proyecto:
+
+1. Haz un fork del repositorio.
+2. Crea una rama para tu característica: `git checkout -b mi-nueva-caracteristica`.
+3. Haz tus cambios y asegúrate de no incluir datos sensibles.
+4. Confirma tus cambios: `git commit -am 'Añadir nueva característica'`.
+5. Sube a la rama: `git push origin mi-nueva-caracteristica`.
+6. Envía un pull request. 

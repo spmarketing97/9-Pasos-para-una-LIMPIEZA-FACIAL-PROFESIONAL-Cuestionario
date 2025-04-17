@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 to_name: 'Administrador',
                 from_name: 'Cuestionario - 9 Pasos para una Limpieza Facial',
                 email_to: 'hristiankrasimirov7@gmail.com',
-                asunto: '9 pasos para una limpieza facial',
+                asunto: '9 Pasos para una limpieza facial',
                 mensaje: mensajeFormateado
             };
             
