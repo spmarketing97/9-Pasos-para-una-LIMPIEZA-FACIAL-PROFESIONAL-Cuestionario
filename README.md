@@ -56,4 +56,37 @@ Para modificar las preguntas del cuestionario, edite el archivo `index.html` en 
 - Valores asociados a cada opción
 
 ## Personalización de estilos
-Para modificar la apariencia visual del cuestionario, edite el archivo `styles.css`. El diseño está organizado en secciones claramente comentadas para facilitar su personalización. 
+Para modificar la apariencia visual del cuestionario, edite el archivo `styles.css`. El diseño está organizado en secciones claramente comentadas para facilitar su personalización.
+
+## Control de versiones con GitHub
+Este proyecto está configurado para trabajar con GitHub mediante los siguientes archivos:
+
+### .gitignore
+Se ha configurado un archivo `.gitignore` para excluir del repositorio:
+- Archivos temporales del sistema (`.DS_Store`, `Thumbs.db`)
+- Entornos virtuales de Python y archivos compilados
+- Archivos de log y reportes generados
+- Directorios de datos sensibles (`analytics/data/`, `analytics/reports/`, `analytics/storage/`)
+- Archivos de dependencias (`node_modules/`)
+- Archivos de configuración personal (`.env`)
+- Archivos de configuración de IDEs
+
+### Estructura recomendada para el repositorio
+Al trabajar con este proyecto en GitHub, se recomienda:
+
+1. Mantener la estructura de ramas:
+   - `main`: Versión estable y producción
+   - `develop`: Desarrollo y pruebas
+   - `feature/nombre`: Para nuevas características
+
+2. Convenciones para commits:
+   - `feat`: Nuevas características
+   - `fix`: Corrección de errores
+   - `docs`: Cambios en documentación
+   - `style`: Cambios en estilo visual
+   - `refactor`: Mejoras de código sin cambiar funcionalidad
+
+3. Proceso de actualización:
+   - Crear Pull Requests para integrar cambios
+   - Revisar código antes de aprobar
+   - Mantener el archivo `.gitignore` actualizado según evolucione el proyecto 
